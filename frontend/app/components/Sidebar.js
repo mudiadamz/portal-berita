@@ -1,6 +1,8 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import axiosClient from '@/app/lib/axiosClient';
+import Link from 'next/link';
 
 export default function Sidebar() {
   const router = useRouter();
@@ -10,7 +12,7 @@ export default function Sidebar() {
     if (!token) return router.push('/login');
 
     try {
-      const res = await fetch('http://localhost:3001/api/auth/logout', {
+      const res = await axiosClient('/auth/logout', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -44,13 +46,13 @@ export default function Sidebar() {
     >
       <h4 className="text-white mb-4">🛠 Admin Panel</h4>
       <ul className="nav nav-pills flex-column mb-auto">
-        <li><a href="/admin" className="nav-link text-white">🏠 Dashboard</a></li>
-        <li><a href="/admin/news" className="nav-link text-white">📝 Berita</a></li>
-        <li><a href="/admin/news/category" className="nav-link text-white">📂 Kategori</a></li>
-        <li><a href="/admin/news/comment" className="nav-link text-white">💬 Komentar</a></li>
-        <li><a href="/admin/news/validation" className="nav-link text-white">✅ Validasi Berita</a></li>
-        {/*<li><a href="/admin" className="nav-link text-white">📊 Statistik</a></li>*/}
-        <li><a href="/" className="nav-link text-white" target="_blank">📊 View Frontend</a></li>
+        <li><Link href="/admin" className="nav-link text-white">🏠 Dashboard</Link></li>
+        <li><Link href="/admin/news" className="nav-link text-white">📝 Berita</Link></li>
+        <li><Link href="/admin/news/category" className="nav-link text-white">📂 Kategori</Link></li>
+        <li><Link href="/admin/news/comment" className="nav-link text-white">💬 Komentar</Link></li>
+        <li><Link href="/admin/news/validation" className="nav-link text-white">✅ Validasi Berita</Link></li>
+        {/*<li><Link href="/admin" className="nav-link text-white">📊 Statistik</Link></li>*/}
+        <li><Link href="/" className="nav-link text-white" target="_blank">📊 View Frontend</Link></li>
       </ul>
       <hr />
       <button onClick={handleLogout} className="btn btn-outline-danger mt-auto">🚪 Logout</button>
