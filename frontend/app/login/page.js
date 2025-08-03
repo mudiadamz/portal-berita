@@ -25,11 +25,7 @@ export default function LoginPage() {
     setGeneralError('');
 
     try {
-      const res = await axiosClient('/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
-      });
+      const res = await axiosClient('/auth/login', form);
 
       const data = await res.json();
 
