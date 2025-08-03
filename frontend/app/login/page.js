@@ -25,7 +25,7 @@ export default function LoginPage() {
     setGeneralError('');
 
     try {
-      const res = await axiosClient('/auth/login', form);
+      const res = await axiosClient.post('/auth/login', form);
 
       const data = await res.json();
 

@@ -30,7 +30,7 @@ export default function RegisterPage() {
     setGeneralError('');
 
     try {
-      const res = await axiosClient('/auth/register', form );
+      const res = await axiosClient.post('/auth/register', form );
 
       const data = await res.json();
 
