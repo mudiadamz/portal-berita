@@ -12,14 +12,14 @@ export default function Sidebar() {
     if (!token) return router.push('/login');
 
     try {
-      const res = await axiosClient('/auth/logout', {
+      const res = await axiosClient.post('/auth/logout', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
         },
       });
 
-      const data = await res.json();
+      const data = await res.data;
       console.log('[Logout]', data.message);
 
       localStorage.removeItem('accessToken');

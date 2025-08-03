@@ -1,118 +1,136 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import {useState} from 'react';
+import {useRouter} from 'next/navigation';
 import axiosClient from '@/app/lib/axiosClient';
 import Link from 'next/link';
 
 export default function RegisterPage() {
-  const router = useRouter();
-  const [form, setForm] = useState({
-    name: '',
-    email: '',
-    password: '',
-    role: 'pengguna'
-  });
-  const [loading, setLoading] = useState(false);
-  const [serverErrors, setServerErrors] = useState([]);
-  const [generalError, setGeneralError] = useState('');
+    const router = useRouter();
+    const [form, setForm] = useState({
+        name: '',
+        email: '',
+        password: '',
+        role: 'pengguna'
+    });
+    const [loading, setLoading] = useState(false);
+    const [serverErrors, setServerErrors] = useState([]);
+    const [generalError, setGeneralError] = useState('');
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-    setServerErrors([]); // clear field errors on input
-    setGeneralError('');
-  };
+    const handleChange = (e) => {
+        setForm({...form, [e.target.name]: e.target.value});
+        setServerErrors([]); // clear field errors on input
+        setGeneralError('');
+    };
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setServerErrors([]);
-    setGeneralError('');
+    const handleRegister = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setServerErrors([]);
+        setGeneralError('');
 
-    try {
-      const res = await axiosClient.post('/auth/register', form );
+        try {
+            const res = await axiosClient.post('/auth/register', form);
+            const data = res.data;
 
-      const data = await res.json();
+            if (data.success) {
+                setTimeout(() => {
+                    localStorage.setItem('accessToken', data.data.tokens.accessToken);
+                    router.push('/login');
+                }, 1500);
+            } else {
+                setGeneralError(data.message || 'Pendaftaran gagal');
+                setServerErrors(data.errors || []);
+            }
+        } catch (err) {
+            console.error(err);
+            setGeneralError('Terjadi kesalahan. Silakan coba lagi.');
+        }
 
-      if (res.ok && data.success) {
-        alert('Pendaftaran berhasil!');
-        localStorage.setItem('accessToken', data.data.tokens.accessToken);
-        router.push('/login');
-      } else {
-        setGeneralError(data.message || 'Pendaftaran gagal');
-        setServerErrors(data.errors || []);
-      }
-    } catch (err) {
-      console.error(err);
-      setGeneralError('Terjadi kesalahan. Silakan coba lagi.');
-    }
+        setLoading(false);
+    };
 
-    setLoading(false);
-  };
+    return (
+        <div className="container mt-5" style={{maxWidth: 400}}>
+            <h2 className="mb-4 text-center">📝 Daftar</h2>
 
-  return (
-    <div className="container mt-5" style={{ maxWidth: 400 }}>
-      <h2 className="mb-4 text-center">📝 Daftar</h2>
+            {/* General Error */}
+            {generalError && (
+                <div className="alert alert-danger" role="alert">
+                    {generalError}
+                </div>
+            )}
 
-      {/* General Error */}
-      {generalError && (
-        <div className="alert alert-danger" role="alert">
-          {generalError}
+            {/* Field-specific Errors */}
+            {serverErrors.length > 0 && (
+                <div className="alert alert-warning" role="alert">
+                    <ul className="mb-0">
+                        {serverErrors.map((err, i) => (
+                            <li key={i}><strong>{err.field}:</strong> {err.message}</li>
+                        ))}
+                    </ul>
+                </div>
+            )}
+
+            <form onSubmit={handleRegister}>
+                <div className="mb-3">
+                    <label className="form-label">Nama</label>
+                    <input
+                        name="name"
+                        type="text"
+                        className="form-control"
+                        required
+                        value={form.name}
+                        onChange={handleChange}
+                    />
+                </div>
+                <div className="mb-3">
+                    <label className="form-label">Email</label>
+                    <input
+                        name="email"
+                        type="email"
+                        className="form-control"
+                        required
+                        value={form.email}
+                        onChange={handleChange}
+                    />
+                </div>
+                <div className="mb-3">
+                    <label className="form-label">Password</label>
+                    <input
+                        name="password"
+                        type="password"
+                        className="form-control"
+                        required
+                        value={form.password}
+                        onChange={handleChange}
+                    />
+                </div>
+                <div className="mb-3">
+                    <label className="form-label">Peran</label>
+                    <select
+                        name="role"
+                        className="form-select"
+                        value={form.role}
+                        onChange={handleChange}
+                        required
+                    >
+                        <option value="pengguna">Pengguna</option>
+                        <option value="jurnalis">Jurnalis</option>
+                        <option value="admin">Admin</option>
+                        <option value="instansi">Instansi</option>
+                    </select>
+                </div>
+                <button type="submit" className="btn btn-success w-100" disabled={loading}>
+                    {loading ? 'Mendaftarkan...' : 'Daftar'}
+                </button>
+                <p className="mt-3 text-center">
+                    Sudah punya akun? <Link href="/login">Login</Link>
+                </p>
+                <p className="mt-3 text-center">
+                    <Link href="/" className={"mr-3 d-inline-block"}>Beranda Portal Berita</Link>
+                </p>
+            </form>
         </div>
-      )}
-
-      {/* Field-specific Errors */}
-      {serverErrors.length > 0 && (
-        <div className="alert alert-warning" role="alert">
-          <ul className="mb-0">
-            {serverErrors.map((err, i) => (
-              <li key={i}><strong>{err.field}:</strong> {err.message}</li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      <form onSubmit={handleRegister}>
-        <div className="mb-3">
-          <label className="form-label">Nama</label>
-          <input
-            name="name"
-            type="text"
-            className="form-control"
-            required
-            value={form.name}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="mb-3">
-          <label className="form-label">Email</label>
-          <input
-            name="email"
-            type="email"
-            className="form-control"
-            required
-            value={form.email}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="mb-3">
-          <label className="form-label">Password</label>
-          <input
-            name="password"
-            type="password"
-            className="form-control"
-            required
-            value={form.password}
-            onChange={handleChange}
-          />
-        </div>
-        <button type="submit" className="btn btn-success w-100" disabled={loading}>
-          {loading ? 'Mendaftarkan...' : 'Daftar'}
-        </button>
-        <p className="mt-3 text-center">
-          Sudah punya akun? <Link href="/login">Login</Link>
-        </p>
-      </form>
-    </div>
-  );
+    );
 }
