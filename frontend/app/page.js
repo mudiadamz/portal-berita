@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import axiosClient from '@/app/lib/axiosClient';
+import Link from 'next/link';
 
 export default function HomePage() {
   const [articles, setArticles] = useState([]);
@@ -65,9 +66,9 @@ export default function HomePage() {
                 <div className="card-body">
                   <h5 className="card-title">{news.judul}</h5>
                   <p className="card-text">{news.ringkasan}</p>
-                  <a href={`/berita/${news.slug}`} className="btn btn-primary float-end">
+                  <Link href={`/berita/${news.slug}`} className="btn btn-primary float-end">
                     Baca Selengkapnya
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>

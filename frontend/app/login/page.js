@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axiosClient from '@/app/lib/axiosClient';
+import Link from 'next/link';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -101,7 +102,7 @@ export default function LoginPage() {
           {loading ? 'Sedang Login...' : 'Login'}
         </button>
         <p className="mt-3 text-center">
-          Belum punya akun? <a href="/register">Daftar</a>
+          Belum punya akun? <Link href="/register">Daftar</Link>
         </p>
       </form>
     </div>

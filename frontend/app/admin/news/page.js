@@ -40,7 +40,7 @@ export default function AdminBeritaPage() {
           <div className=" d-flex ">
             <h2 className="mb-4">📝 Daftar Berita</h2>
             <div className="ms-auto">
-              <a href="/admin/news/add" className={"btn btn-sm btn-success"}>Tambah berita</a>
+              <Link href="/admin/news/add" className={"btn btn-sm btn-success"}>Tambah berita</Link>
             </div>
           </div>
           {error && <div className="alert alert-danger">{error}</div>}
@@ -74,7 +74,7 @@ export default function AdminBeritaPage() {
                         <Link href={`/berita/${article.slug}`} className="btn btn-sm btn-outline-primary me-2">
                           Lihat
                         </Link>
-                        <a href={`/admin/news/edit/${article.id}`} className="btn btn-sm btn-outline-secondary">Edit</a>
+                        <Link href={`/admin/news/edit/${article.id}`} className="btn btn-sm btn-outline-secondary">Edit</Link>
                       </td>
                     </tr>
                   ))
