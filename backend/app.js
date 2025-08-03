@@ -109,7 +109,7 @@ app.get('/health', (req, res) => {
 /**
  * API Routes
  */
-app.use('/api', apiRoutes);
+app.use('/portal-api', apiRoutes);
 
 /**
  * Root endpoint
