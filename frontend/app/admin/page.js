@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Sidebar from '../components/Sidebar';
-import axiosClient from '../lib/axiosClient';
+import Sidebar from '@app/components/Sidebar';
+import axiosClient from '@app/lib/axiosClient';
 
 export default function AdminPage() {
   const [stats, setStats] = useState(null);

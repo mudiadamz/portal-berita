@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import axiosClient from '@app/lib/axiosClient';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -28,7 +29,7 @@ export default function RegisterPage() {
     setGeneralError('');
 
     try {
-      const res = await fetch('http://localhost:3001/api/auth/register', {
+      const res = await axiosClient('/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form)
