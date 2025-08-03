@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import axiosClient from '@app/lib/axiosClient';
+import axiosClient from '@/app/lib/axiosClient';
 
 export default function LoginPage() {
   const router = useRouter();
