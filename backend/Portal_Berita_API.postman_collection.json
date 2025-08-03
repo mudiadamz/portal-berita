@@ -1,0 +1,1548 @@
+{
+	"info": {
+		"_postman_id": "portal-berita-api-collection",
+		"name": "Portal Berita API",
+		"description": "Comprehensive API collection for Portal Berita news management system with role-based access control",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "portal-berita"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    if (response.data && response.data.tokens) {",
+									"        pm.environment.set('accessToken', response.data.tokens.accessToken);",
+									"        pm.environment.set('refreshToken', response.data.tokens.refreshToken);",
+									"        pm.environment.set('userId', response.data.user.id);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Test User\",\n    \"email\": \"testuser@example.com\",\n    \"password\": \"TestPass123!\",\n    \"role\": \"pengguna\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Test User\",\n    \"email\": \"testuser@example.com\",\n    \"password\": \"TestPass123!\",\n    \"role\": \"pengguna\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/auth/register",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"register"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"User registered successfully\",\n    \"data\": {\n        \"user\": {\n            \"id\": 5,\n            \"name\": \"Test User\",\n            \"email\": \"testuser@example.com\",\n            \"role\": \"pengguna\",\n            \"status\": \"aktif\",\n            \"isActive\": true,\n            \"createdAt\": \"2024-01-15T10:30:00.000Z\",\n            \"updatedAt\": \"2024-01-15T10:30:00.000Z\"\n        },\n        \"tokens\": {\n            \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\",\n            \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\"\n        }\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Login User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.data && response.data.tokens) {",
+									"        pm.environment.set('accessToken', response.data.tokens.accessToken);",
+									"        pm.environment.set('refreshToken', response.data.tokens.refreshToken);",
+									"        pm.environment.set('userId', response.data.user.id);",
+									"        pm.environment.set('userRole', response.data.user.role);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@portalberita.com\",\n    \"password\": \"Admin123!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login as Jurnalis",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.data && response.data.tokens) {",
+									"        pm.environment.set('jurnalisToken', response.data.tokens.accessToken);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"editor@portalberita.com\",\n    \"password\": \"Editor123!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login as Instansi",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.data && response.data.tokens) {",
+									"        pm.environment.set('instansiToken', response.data.tokens.accessToken);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"instansi@portalberita.com\",\n    \"password\": \"Admin123!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Profile",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/profile",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Profile",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Updated Name\",\n    \"email\": \"updated@example.com\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/profile",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change Password",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"currentPassword\": \"TestPass123!\",\n    \"newPassword\": \"NewPass123!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/change-password",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"change-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/logout",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Categories (Kategori)",
+			"item": [
+				{
+					"name": "Get All Categories",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/kategori?page=1&limit=10&sort=nama&order=asc&search=&isActive=true",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"kategori"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "sort",
+									"value": "nama"
+								},
+								{
+									"key": "order",
+									"value": "asc"
+								},
+								{
+									"key": "search",
+									"value": ""
+								},
+								{
+									"key": "isActive",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Active Categories",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/kategori/active",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"kategori",
+								"active"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Category by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/kategori/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"kategori",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Category by Slug",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/kategori/slug/teknologi",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"kategori",
+								"slug",
+								"teknologi"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Category (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nama\": \"Kategori Baru\",\n    \"deskripsi\": \"Deskripsi kategori baru\",\n    \"slug\": \"kategori-baru\",\n    \"isActive\": true\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/kategori",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"kategori"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Category (Admin)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nama\": \"Kategori Updated\",\n    \"deskripsi\": \"Deskripsi yang sudah diupdate\",\n    \"isActive\": true\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/kategori/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"kategori",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Category (Admin)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/kategori/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"kategori",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Category Statistics (Admin)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/kategori/stats",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"kategori",
+								"stats"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+	{
+		"name": "User Management (Admin Only)",
+		"item": [
+			{
+				"name": "Get All Users",
+				"request": {
+					"method": "GET",
+					"header": [
+						{
+							"key": "Authorization",
+							"value": "Bearer {{accessToken}}"
+						}
+					],
+					"url": {
+						"raw": "{{baseUrl}}/api/users?page=1&limit=10&sort=created_at&order=desc&search=&role=",
+						"host": [
+							"{{baseUrl}}"
+						],
+						"path": [
+							"api",
+							"users"
+						],
+						"query": [
+							{
+								"key": "page",
+								"value": "1"
+							},
+							{
+								"key": "limit",
+								"value": "10"
+							},
+							{
+								"key": "sort",
+								"value": "created_at"
+							},
+							{
+								"key": "order",
+								"value": "desc"
+							},
+							{
+								"key": "search",
+								"value": ""
+							},
+							{
+								"key": "role",
+								"value": ""
+							}
+						]
+					}
+				},
+				"response": []
+			},
+			{
+				"name": "Get User by ID",
+				"request": {
+					"method": "GET",
+					"header": [
+						{
+							"key": "Authorization",
+							"value": "Bearer {{accessToken}}"
+						}
+					],
+					"url": {
+						"raw": "{{baseUrl}}/api/users/{{userId}}",
+						"host": [
+							"{{baseUrl}}"
+						],
+						"path": [
+							"api",
+							"users",
+							"{{userId}}"
+						]
+					}
+				},
+				"response": []
+			},
+			{
+				"name": "Create User",
+				"request": {
+					"method": "POST",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Authorization",
+							"value": "Bearer {{accessToken}}"
+						}
+					],
+					"body": {
+						"mode": "raw",
+						"raw": "{\n    \"name\": \"New User\",\n    \"email\": \"newuser@example.com\",\n    \"password\": \"NewPass123!\",\n    \"role\": \"pengguna\",\n    \"status\": \"aktif\"\n}"
+					},
+					"url": {
+						"raw": "{{baseUrl}}/api/users",
+						"host": [
+							"{{baseUrl}}"
+						],
+						"path": [
+							"api",
+							"users"
+						]
+					}
+				},
+				"response": []
+			},
+			{
+				"name": "Update User",
+				"request": {
+					"method": "PUT",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Authorization",
+							"value": "Bearer {{accessToken}}"
+						}
+					],
+					"body": {
+						"mode": "raw",
+						"raw": "{\n    \"name\": \"Updated User Name\",\n    \"role\": \"jurnalis\",\n    \"status\": \"aktif\",\n    \"isActive\": true\n}"
+					},
+					"url": {
+						"raw": "{{baseUrl}}/api/users/{{userId}}",
+						"host": [
+							"{{baseUrl}}"
+						],
+						"path": [
+							"api",
+							"users",
+							"{{userId}}"
+						]
+					}
+				},
+				"response": []
+			},
+			{
+				"name": "Delete User",
+				"request": {
+					"method": "DELETE",
+					"header": [
+						{
+							"key": "Authorization",
+							"value": "Bearer {{accessToken}}"
+						}
+					],
+					"url": {
+						"raw": "{{baseUrl}}/api/users/{{userId}}",
+						"host": [
+							"{{baseUrl}}"
+						],
+						"path": [
+							"api",
+							"users",
+							"{{userId}}"
+						]
+					}
+				},
+				"response": []
+			},
+			{
+				"name": "Get User Statistics",
+				"request": {
+					"method": "GET",
+					"header": [
+						{
+							"key": "Authorization",
+							"value": "Bearer {{accessToken}}"
+						}
+					],
+					"url": {
+						"raw": "{{baseUrl}}/api/users/stats",
+						"host": [
+							"{{baseUrl}}"
+						],
+						"path": [
+							"api",
+							"users",
+							"stats"
+						]
+					}
+				},
+				"response": []
+			}
+		]
+	},
+		{
+			"name": "Institution Channels (Kanal Instansi)",
+			"item": [
+				{
+					"name": "Get All Channels",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/kanal-instansi?page=1&limit=10&sort=created_at&order=desc&search=&isVerified=&isActive=true",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"kanal-instansi"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "sort",
+									"value": "created_at"
+								},
+								{
+									"key": "order",
+									"value": "desc"
+								},
+								{
+									"key": "search",
+									"value": ""
+								},
+								{
+									"key": "isVerified",
+									"value": ""
+								},
+								{
+									"key": "isActive",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Verified Channels",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/kanal-instansi/verified",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"kanal-instansi",
+								"verified"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Channel (Instansi)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{instansiToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nama\": \"Kementerian Contoh\",\n    \"deskripsi\": \"Kanal resmi Kementerian Contoh\",\n    \"slug\": \"kementerian-contoh\",\n    \"websiteUrl\": \"https://contoh.go.id\",\n    \"contactEmail\": \"humas@contoh.go.id\",\n    \"contactPhone\": \"021-12345678\",\n    \"alamat\": \"Jl. Contoh No. 123, Jakarta\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/kanal-instansi",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"kanal-instansi"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "News Articles (Berita)",
+			"item": [
+				{
+					"name": "Get All News",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/berita?page=1&limit=10&sort=created_at&order=desc&search=&kategoriId=&status=published&authorId=&kanalInstansiId=&isFeatured=&isBreakingNews=",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"berita"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "sort",
+									"value": "created_at"
+								},
+								{
+									"key": "order",
+									"value": "desc"
+								},
+								{
+									"key": "search",
+									"value": ""
+								},
+								{
+									"key": "kategoriId",
+									"value": ""
+								},
+								{
+									"key": "status",
+									"value": "published"
+								},
+								{
+									"key": "authorId",
+									"value": ""
+								},
+								{
+									"key": "kanalInstansiId",
+									"value": ""
+								},
+								{
+									"key": "isFeatured",
+									"value": ""
+								},
+								{
+									"key": "isBreakingNews",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get News by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/berita/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"berita",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get News by Slug",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/berita/slug/perkembangan-teknologi-ai-indonesia-2024",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"berita",
+								"slug",
+								"perkembangan-teknologi-ai-indonesia-2024"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get My Articles",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/berita/my-articles?page=1&limit=10&sort=created_at&order=desc&search=&kategoriId=&status=",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"berita",
+								"my-articles"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "sort",
+									"value": "created_at"
+								},
+								{
+									"key": "order",
+									"value": "desc"
+								},
+								{
+									"key": "search",
+									"value": ""
+								},
+								{
+									"key": "kategoriId",
+									"value": ""
+								},
+								{
+									"key": "status",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create News Article (Jurnalis)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    if (response.data && response.data.article) {",
+									"        pm.environment.set('beritaId', response.data.article.id);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jurnalisToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"judul\": \"Berita Terbaru dari Jurnalis\",\n    \"slug\": \"berita-terbaru-dari-jurnalis\",\n    \"konten\": \"Ini adalah konten berita yang sangat panjang dan informatif. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\",\n    \"ringkasan\": \"Ringkasan singkat dari berita ini\",\n    \"gambarUtama\": \"https://example.com/image.jpg\",\n    \"tags\": [\"berita\", \"terbaru\", \"jurnalis\"],\n    \"kategoriId\": 1,\n    \"status\": \"published\",\n    \"metaTitle\": \"Berita Terbaru - Portal Berita\",\n    \"metaDescription\": \"Berita terbaru dari jurnalis kami\",\n    \"isFeatured\": false,\n    \"isBreakingNews\": false\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/berita",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"berita"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Comments (Komentar)",
+			"item": [
+				{
+					"name": "Get Comments for News",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/berita/1/komentar?page=1&limit=20&sort=created_at&order=asc",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"berita",
+								"1",
+								"komentar"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "20"
+								},
+								{
+									"key": "sort",
+									"value": "created_at"
+								},
+								{
+									"key": "order",
+									"value": "asc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Comment to News",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"konten\": \"Ini adalah komentar yang sangat bagus dan informatif!\",\n    \"parentId\": null\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/berita/{{beritaId}}/komentar",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"berita",
+								"{{beritaId}}",
+								"komentar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get My Comments",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/komentar/my-comments?page=1&limit=10&sort=created_at&order=desc",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"komentar",
+								"my-comments"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "sort",
+									"value": "created_at"
+								},
+								{
+									"key": "order",
+									"value": "desc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Comment",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"konten\": \"Komentar yang sudah diupdate dengan informasi baru\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/komentar/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"komentar",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Comment",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/komentar/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"komentar",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Bookmarks",
+			"item": [
+				{
+					"name": "Get My Bookmarks",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/bookmarks?page=1&limit=10&sort=created_at&order=desc&kategoriId=&search=",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"bookmarks"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "sort",
+									"value": "created_at"
+								},
+								{
+									"key": "order",
+									"value": "desc"
+								},
+								{
+									"key": "kategoriId",
+									"value": ""
+								},
+								{
+									"key": "search",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Bookmark",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"beritaId\": {{beritaId}}\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/bookmarks",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"bookmarks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check Bookmark Status",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/bookmarks/check/{{beritaId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"bookmarks",
+								"check",
+								"{{beritaId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Bookmark by Article ID",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/bookmarks/article/{{beritaId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"bookmarks",
+								"article",
+								"{{beritaId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Bookmark Statistics",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/bookmarks/stats",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"bookmarks",
+								"stats"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Bookmarks by Category",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/bookmarks/by-category",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"bookmarks",
+								"by-category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Recent Bookmarks",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/bookmarks/recent?limit=5",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"bookmarks",
+								"recent"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Bulk Remove Bookmarks",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"bookmarkIds\": [1, 2, 3]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/bookmarks/bulk",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"bookmarks",
+								"bulk"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3001",
+			"type": "string"
+		},
+		{
+			"key": "accessToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "refreshToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "userId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "userRole",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "jurnalisToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "instansiToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "beritaId",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
